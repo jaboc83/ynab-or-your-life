@@ -1,8 +1,23 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Welcome";
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <p>
+        This simple app provides you with a way to view your monthly budget 
+        using the formula laid out in the amazing book "Your Money or Your Life" 
+        by Vicki Robin and Joe Dominguez
+    </p>
+    <p>
+        It doubles as a way to check my implementation of the YNAB .net core SDK
+        which can be found <a href="https://github.com/jaboc83/ynab-sdk-dotnetcore">here</a>
+    </p>
+    <p>
+        In order for the app to access your YNAB account information you will 
+        need to add an access token from your MyAccount page into the 
+        <code>appsettings.json</code> file. The token can be acquired following 
+        <a href="https://api.youneedabudget.com/">the documentation on the YNAB API</a>
+        page
+    </p>
 </div>

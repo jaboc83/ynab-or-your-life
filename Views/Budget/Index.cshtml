@@ -1,0 +1,26 @@
+@using YNAB.SDK;
+@using YNAB.SDK.Model;
+@model BudgetDetail;
+@{
+  ViewData["Title"] = "Your Budget";
+  var ignoredCategories = new string[] { "To be Budgeted", "Deferred Income SubCategory", "Uncategorized" };
+  var wage = 5.25;
+}
+<div class="container">
+  <label for="wage-input">Hourly Wage: @Model.CurrencyFormat.CurrencySymbol</label>
+  <input id="wage-input" type="number" value=@wage />
+    <table>
+    <thead>
+      <th>Category</th>
+      <th>Life Budgeted</th>
+    </thead>
+    <tbody>
+      @foreach (var category in @Model.Categories.Where(c => !ignoredCategories.Contains(c.Name) && !c.Hidden && c.Budgeted > 0 )) {
+      <tr>
+        <td>@category.Name</td>
+        <td>@(Math.Round(double.Parse(Utils.ConvertMilliUnitsToCurrencyAmount(category.Budgeted)) / wage, 2)) hours</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

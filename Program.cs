@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace ynab_or_your_life
+namespace YNABOrYourLife
 {
     public class Program
     {

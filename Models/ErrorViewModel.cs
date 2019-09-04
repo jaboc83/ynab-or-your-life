@@ -1,6 +1,6 @@
 using System;
 
-namespace ynab_or_your_life.Models
+namespace YNABOrYourLife.Models
 {
     public class ErrorViewModel
     {
