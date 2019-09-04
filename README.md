@@ -10,7 +10,11 @@ month in work hours using the formula outlined in "Your Money or Your Life"
 To use this client, you must [obtain an access token][accesstoken] from the
 [My Account][myaccount] area of the YNAB web application.
 
-TODO: Add run instructions
+- Make sure you have .net core 2.2 installed.
+- Clone the repo and add the token you obtained in place of the `YOUR_TOKEN_HERE`
+text inside the `appsettings.json` file
+- run `dotnet run` from a terminal inside the ynab-or-your-life root directory
+- Open a browser and navigate to https://localhost:5001
 
 ## License
 
