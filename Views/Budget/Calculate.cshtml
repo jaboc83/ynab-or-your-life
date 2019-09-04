@@ -1,0 +1,57 @@
+@using YNAB.SDK;
+@using YNAB.SDK.Model;
+@model BudgetDetail;
+@{
+  ViewData["Title"] = "Your Budget";
+  var ignoredCategories = new string[] { "To be Budgeted", "Deferred Income SubCategory", "Uncategorized" };
+  Object wageObj;
+  double? wage = null;
+  if(ViewData.TryGetValue("Wage", out wageObj))
+  {
+    wage = double.Parse(wageObj.ToString());
+  }
+}
+<div class="container">
+  <form class="form-horizontal" method="post">
+    <div class="form-group">
+      <label for="wage" class="col-sm-2 control-label">Hourly Wage</label>
+      <div class="col-sm-10">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">@Model.CurrencyFormat.CurrencySymbol</span>
+          </div>
+          <input name="wage" placeholder="@wage" type="text" class="form-control" aria-label="Amount">
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary">Calculate</button>
+      </div>
+    </div>
+  </form>
+  @if(wage.HasValue) {
+  <table>
+    <thead>
+      <th>Category</th>
+      @if(wage.HasValue) {
+      <th>Life Budgeted</th>
+      } else {
+      <th>Budgeted</th>
+      }
+    </thead>
+    <tbody>
+      @foreach (var category in @Model.Categories.Where(c => !ignoredCategories.Contains(c.Name) && !c.Hidden && c.Budgeted > 0 )) {
+      <tr>
+        <td>@category.Name</td>
+        @if(wage.HasValue) {
+          <td>@(Math.Round(double.Parse(Utils.ConvertMilliUnitsToCurrencyAmount(category.Budgeted)) / wage.Value, 2)) hours</td>
+        } else {
+          <td>@Model.CurrencyFormat.CurrencySymbol@double.Parse(Utils.ConvertMilliUnitsToCurrencyAmount(category.Budgeted))</td>
+        }
+      </tr>
+      }
+    </tbody>
+  </table>
+  }
+</div>

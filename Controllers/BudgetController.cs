@@ -7,19 +7,34 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using YNABOrYourLife.Models;
 using YNAB.SDK;
+using YNAB.SDK.Model;
 
 namespace YNABOrYourLife.Controllers
 {
   public class BudgetController : Controller
   {
     private readonly API _ynabApi;
-    public BudgetController(IOptions<YNABOrYourLifeOptions> options) {
-      _ynabApi = new API(options.Value.YNABToken);
+    public BudgetController(IOptionsMonitor<YNABOptions> options) {
+      _ynabApi = new API(options.CurrentValue.YNABToken);
     }
+
+    [HttpGet]
     public async Task<IActionResult> Index()
     {
-      var lastBudgetModifiedId = (await _ynabApi.Budgets.GetBudgetsAsync()).Data.Budgets.OrderByDescending(x => x.LastModifiedOn).First().Id;
-      var budget = (await _ynabApi.Budgets.GetBudgetByIdAsync(lastBudgetModifiedId.ToString())).Data.Budget;
+      var budgets = (await _ynabApi.Budgets.GetBudgetsAsync()).Data.Budgets;
+      return View(budgets);
+    }
+
+    [HttpGet]
+    [HttpPost]
+    [Route("Budget/{budgetId}")]
+    public async Task<IActionResult> Calculate(Guid budgetId, string wage)
+    {
+      var budget = (await _ynabApi.Budgets.GetBudgetByIdAsync(budgetId.ToString())).Data.Budget;
+      if(wage != null)
+      {
+        ViewData.Add("Wage", double.Parse(wage));
+      }
       return View(budget);
     }
 
