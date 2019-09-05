@@ -10,6 +10,8 @@
   {
     wage = double.Parse(wageObj.ToString());
   }
+  double total = 0.0;
+  double hours;
 }
 <div class="container">
   <form class="form-horizontal" method="post">
@@ -41,11 +43,15 @@
       }
     </thead>
     <tbody>
-      @foreach (var category in @Model.Categories.Where(c => !ignoredCategories.Contains(c.Name) && !c.Hidden && c.Budgeted > 0 )) {
+      @foreach (var category in @Model.Categories.Where(c => !ignoredCategories.Contains(c.Name) && !c.Hidden && c.Budgeted > 0 ).OrderByDescending(c => c.Budgeted)) {
       <tr>
         <td>@category.Name</td>
         @if(wage.HasValue) {
-          <td>@(Math.Round(double.Parse(Utils.ConvertMilliUnitsToCurrencyAmount(category.Budgeted)) / wage.Value, 2)) hours</td>
+          {
+            hours = Math.Round(double.Parse(Utils.ConvertMilliUnitsToCurrencyAmount(category.Budgeted)) / wage.Value, 2);
+            total += hours;
+          }
+          <td>@hours hours</td>
         } else {
           <td>@Model.CurrencyFormat.CurrencySymbol@double.Parse(Utils.ConvertMilliUnitsToCurrencyAmount(category.Budgeted))</td>
         }
@@ -53,5 +59,6 @@
       }
     </tbody>
   </table>
+  <p>Total Hours this month: @total</p>
   }
 </div>
