@@ -1,5 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Welcome";
+    var clientId = ViewData["ClientId"];
+    var redirectUri = Context.Request.Host + "/Budget";
 }
 
 <div class="text-center">
@@ -9,15 +11,17 @@
         using the formula laid out in the amazing book "Your Money or Your Life"
         by Vicki Robin and Joe Dominguez
     </p>
-    <p>
-        It doubles as a way to check my implementation of the YNAB .net core SDK
-        which can be found <a href="https://github.com/jaboc83/ynab-sdk-dotnetcore">here</a>
-    </p>
-    <p>
-        In order for the app to access your YNAB account information you will
-        need to add an access token from your MyAccount page into the
-        <code>appsettings.json</code> file. The token can be acquired following
-        <a href="https://api.youneedabudget.com/">the documentation on the YNAB API</a>
-        page
-    </p>
+    <form>
+       <div class="form-group">
+            <p class="lead">If you would like to use this App, please authorize with YNAB!</p>
+            <button onclick="authorizeWithYNAB" class="btn btn-primary">Authorize This App With YNAB &gt;</button>
+          </div>`
+    </form>
 </div>
+<script>
+  function authorizeWithYNAB(e) {
+    e.preventDefault();
+    const uri = `https://app.youneedabudget.com/oauth/authorize?client_id=@clientId&redirect_uri=@redirectUri&response_type=token`;
+    location.replace(uri);
+  }
+</script>
