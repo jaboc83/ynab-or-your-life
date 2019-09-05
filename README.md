@@ -1,9 +1,9 @@
-# YNAB Or Your Life
+# Budget Or Your Life for YNAB
 ![YNAB or Your Life Preview](/YNABOrYourLifePreview.png)
 
 
 This is a simple app that allows you to view your budgeted amounts for the current
-month in work hours using the formula outlined in "Your Money or Your Life". You can 
+month in work hours using the formula outlined in "Your Money or Your Life". You can
 calculate your hourly wage on [their website](https://yourmoneyoryourlife.com/life-energy-calculator/).
 
 ## To Run
