@@ -32,7 +32,8 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Budget" asp-action="Index">Budget</a>
+                            <a class="nav-link text-dark" data-bind="attr: { href: budgetUrl }">Budget</a>
+
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Privacy" asp-action="Index">Privacy</a>
@@ -73,6 +74,36 @@
         </script>
     </environment>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0/knockout-min.js"></script>
+    <script>
+      function findYNABToken() {
+        let token = null;
+        const search = window.location.hash.substring(1).replace(/&/g, '","').replace(/=/g,'":"');
+        if (search && search !== '') {
+          // Try to get access_token from the hash returned by OAuth
+          const params = JSON.parse('{"' + search + '"}', function(key, value) {
+            return key === '' ? value : decodeURIComponent(value);
+          });
+          token = params.access_token;
+          sessionStorage.setItem('ynab_access_token', token);
+          window.location.hash = '';
+        } else {
+          // Otherwise try sessionStorage
+          token = sessionStorage.getItem('ynab_access_token');
+        }
+        return token;
+      }
+      function AppVm() {
+        this.accessToken =  ko.observable(findYNABToken());
+        this.budgetUrl = ko.computed(function(){
+          return 'Budget?access_token=' + this.accessToken();
+        }, this);
+        this.showAuthButton = ko.computed(function(){
+          return this.accessToken() == null;
+        }, this);
+      };
+      ko.applyBindings(new AppVm());
+    </script>
 
     @RenderSection("Scripts", required: false)
 </body>

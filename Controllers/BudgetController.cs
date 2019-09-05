@@ -13,24 +13,25 @@ namespace YNABOrYourLife.Controllers
 {
   public class BudgetController : Controller
   {
-    private readonly API _ynabApi;
+    private API ynabApi;
     public BudgetController(IOptionsMonitor<YNABOptions> options) {
-      _ynabApi = new API(options.CurrentValue.YNABToken);
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index([FromQuery(Name="access_token")] string token)
     {
-      var budgets = (await _ynabApi.Budgets.GetBudgetsAsync()).Data.Budgets;
+      ynabApi = new API(token);
+      var budgets = (await ynabApi.Budgets.GetBudgetsAsync()).Data.Budgets;
       return View(budgets);
     }
 
     [HttpGet]
     [HttpPost]
     [Route("Budget/{budgetId}")]
-    public async Task<IActionResult> Calculate(Guid budgetId, string wage)
+    public async Task<IActionResult> Calculate(Guid budgetId, string wage, [FromQuery(Name="access_token")] string token)
     {
-      var budget = (await _ynabApi.Budgets.GetBudgetByIdAsync(budgetId.ToString())).Data.Budget;
+      ynabApi = new API(token);
+      var budget = (await ynabApi.Budgets.GetBudgetByIdAsync(budgetId.ToString())).Data.Budget;
       if(wage != null)
       {
         ViewData.Add("Wage", double.Parse(wage));

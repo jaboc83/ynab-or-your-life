@@ -1,8 +1,9 @@
 ﻿@{
     ViewData["Title"] = "Welcome";
     var clientId = ViewData["ClientId"];
-    var redirectUri = Context.Request.Host + "/Budget";
+    var redirectUri = Context.Request.Scheme + "://" + Context.Request.Host;
 }
+
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
@@ -12,16 +13,18 @@
         by Vicki Robin and Joe Dominguez
     </p>
     <form>
-       <div class="form-group">
+       <div data-bind="if: showAuthButton" class="form-group">
             <p class="lead">If you would like to use this App, please authorize with YNAB!</p>
-            <button onclick="authorizeWithYNAB" class="btn btn-primary">Authorize This App With YNAB &gt;</button>
+            <button  type="button" onclick="authorizeWithYNAB()" class="btn btn-primary">Authorize This App With YNAB &gt;</button>
           </div>`
     </form>
 </div>
-<script>
-  function authorizeWithYNAB(e) {
-    e.preventDefault();
-    const uri = `https://app.youneedabudget.com/oauth/authorize?client_id=@clientId&redirect_uri=@redirectUri&response_type=token`;
-    location.replace(uri);
-  }
-</script>
+@section scripts {
+  <script>
+    function authorizeWithYNAB(e) {
+      const uri = `https://app.youneedabudget.com/oauth/authorize?client_id=@clientId&redirect_uri=@redirectUri&response_type=token`;
+      location.replace(uri);
+    }
+  </script>
+}
+
