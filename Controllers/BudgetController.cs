@@ -22,6 +22,7 @@ namespace YNABOrYourLife.Controllers
     {
       ynabApi = new API(token);
       var budgets = (await ynabApi.Budgets.GetBudgetsAsync()).Data.Budgets;
+      ViewData.Add("AccessToken", token);
       return View(budgets);
     }
 
@@ -32,6 +33,7 @@ namespace YNABOrYourLife.Controllers
     {
       ynabApi = new API(token);
       var budget = (await ynabApi.Budgets.GetBudgetByIdAsync(budgetId.ToString())).Data.Budget;
+      ViewData.Add("AccessToken", token);
       if(wage != null)
       {
         ViewData.Add("Wage", double.Parse(wage));

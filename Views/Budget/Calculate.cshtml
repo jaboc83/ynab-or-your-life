@@ -3,6 +3,7 @@
 @model BudgetDetail;
 @{
   ViewData["Title"] = "Your Budget";
+  var accessToken = ViewData["Token"];
   var ignoredCategories = new string[] { "To be Budgeted", "Deferred Income SubCategory", "Uncategorized" };
   Object wageObj;
   double? wage = null;
