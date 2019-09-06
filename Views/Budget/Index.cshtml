@@ -9,7 +9,7 @@
 <div class="container">
   <div class="list-group">
     @foreach(var budget in @Model) {
-      <a href="Budget/@budget.Id?access_token=@accessToken" class="list-group-item list-group-item-action">@budget.Name</a>
+      <a href="Budget/@budget.Id?access_token=@accessToken&currency_symbol=@budget.CurrencyFormat.CurrencySymbol" class="list-group-item list-group-item-action">@budget.Name</a>
     }
   </div>
 

@@ -29,16 +29,17 @@ namespace YNABOrYourLife.Controllers
     [HttpGet]
     [HttpPost]
     [Route("Budget/{budgetId}")]
-    public async Task<IActionResult> Calculate(Guid budgetId, string wage, [FromQuery(Name="access_token")] string token)
+    public async Task<IActionResult> Calculate(Guid budgetId, string wage, [FromQuery(Name="access_token")] string token, [FromQuery(Name="currency_symbol")] string currencySymbol)
     {
       ynabApi = new API(token);
-      var budget = (await ynabApi.Budgets.GetBudgetByIdAsync(budgetId.ToString())).Data.Budget;
+      var month = (await ynabApi.Months.GetBudgetMonthAsync(budgetId.ToString(), DateTime.Parse(Utils.GetCurrentMonthInISOFormat()))).Data.Month;
       ViewData.Add("AccessToken", token);
+      ViewData.Add("CurrencySymbol", currencySymbol);
       if(wage != null)
       {
         ViewData.Add("Wage", double.Parse(wage));
       }
-      return View(budget);
+      return View(month);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
