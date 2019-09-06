@@ -1,5 +1,5 @@
 # Budget Or Your Life for YNAB
-![YNAB or Your Life Preview](/YNABOrYourLifePreview.png)
+![YNAB or Your Life Preview](/BudgetOrYourLifePreview.png)
 
 
 This is a simple app that allows you to view your budgeted amounts for the current
