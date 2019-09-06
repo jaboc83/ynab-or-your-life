@@ -23,7 +23,7 @@
           <div class="input-group-prepend">
             <span class="input-group-text">@Model.CurrencyFormat.CurrencySymbol</span>
           </div>
-          <input name="wage" placeholder="@wage" type="text" class="form-control" aria-label="Amount">
+          <input name="wage" value="@wage" type="text" class="form-control" aria-label="Amount">
         </div>
       </div>
     </div>
@@ -34,8 +34,8 @@
     </div>
   </form>
   @if(wage.HasValue) {
-  <table>
-    <thead>
+  <table class="table table-striped">
+    <thead class="thead-dark">
       <th>Category</th>
       @if(wage.HasValue) {
       <th>Life Budgeted</th>
