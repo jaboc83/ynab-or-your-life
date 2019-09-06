@@ -20,10 +20,13 @@
       your own risk!
     </p>
     <form>
-       <div data-bind="if: showAuthButton" class="form-group">
-            <p class="lead">If you would like to use this App, please authorize with YNAB!</p>
-            <button  type="button" onclick="authorizeWithYNAB()" class="btn btn-primary">Authorize This App With YNAB &gt;</button>
-          </div>`
+        <div data-bind="if: showAuthButton" class="form-group">
+          <p class="lead">If you would like to use this App, please authorize with YNAB!</p>
+          <button  type="button" onclick="authorizeWithYNAB()" class="btn btn-primary">Authorize This App With YNAB &gt;</button>
+        </div>
+        <div data-bind="if: !showAuthButton()" class="form-group">
+          <a role="button" data-bind="attr: { href: budgetUrl }" class="btn btn-primary">Click Here to Continue</a>
+        </div>
     </form>
 </div>
 @section scripts {
