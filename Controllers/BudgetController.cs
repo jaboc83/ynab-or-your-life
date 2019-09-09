@@ -39,14 +39,17 @@ namespace YNABOrYourLife.Controllers
       return new MiniBudgetDetail
       {
         Id = budgetId,
-        Categories = month.Categories.Where(c => !c.Hidden && !ignoredCategories.Contains(c.Name)).Select(c =>
-          new MiniCategory
-          {
-            Id = c.Id.ToString(),
-            Name = c.Name,
-            Budgeted = float.Parse(Utils.ConvertMilliUnitsToCurrencyAmount(c.Budgeted))
-          }
-        )
+        Categories = month.Categories
+          .Where(c =>
+            !c.Hidden && !ignoredCategories.Contains(c.Name) && c.Budgeted > 0)
+          .Select(c =>
+            new MiniCategory
+            {
+              Id = c.Id.ToString(),
+              Name = c.Name,
+              Budgeted = float.Parse(Utils.ConvertMilliUnitsToCurrencyAmount(c.Budgeted))
+            }
+          )
       };
     }
   }

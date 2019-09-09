@@ -46,7 +46,7 @@ class App extends React.Component<AppProps, AppState> {
       this.state.budgetId = urlParams.get('budgetId') || undefined;
     }
     if(urlParams.has('currencySymbol')) {
-      this.state.currencySymbol = urlParams.get('budgetId') || "$";
+      this.state.currencySymbol = urlParams.get('currencySymbol') || "$";
     }
   }
 
