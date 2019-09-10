@@ -4,44 +4,55 @@ import axios from 'axios';
 import { ListGroup, ListGroupItem } from 'reactstrap'
 import { RouteComponentProps } from 'react-router';
 
-// Contexts
-import AppContext from '../../AppContext';
-
-export interface BudgetListProps extends RouteComponentProps {
+// Interfaces
+interface BudgetListProps extends RouteComponentProps {
   accessToken: string
 }
 
+// Component
 class BudgetList extends React.Component<BudgetListProps> {
-  static contextType = AppContext;
   state = {
     budgets: [],
-    loading: true
+    loading: true,
   }
 
+  // Get the budget list from the server
   componentDidMount() {
-    axios.get(`api/budget?accessToken=${this.context.token}`)
+    axios.get(`api/budget?accessToken=${this.props.accessToken}`)
     .then(result => {
       this.setState({budgets: result.data, loading: false})
     });
   }
 
+  // Render UI
   render() {
+
+    // UI Fragments
+    const loading = (
+      <span>Loading...</span>
+    );
+    const budgetItem = (budgetSummary: YNABTypes.BudgetSummary) => (
+      <ListGroupItem key={budgetSummary.id}>
+        <a href={`budget?budgetId=${budgetSummary.id}&currencySymbol=${budgetSummary.currencySymbol}`}>
+          { budgetSummary.name }
+        </a>
+      </ListGroupItem>
+    );
+    const budgetList = (
+      <ListGroup>
+        {
+          this.state.budgets.map(budgetItem)
+        }
+      </ListGroup>
+    );
+
+    // Main UI
     return (
       <div>
         {
-          this.state.loading ?
-          <span>Loading...</span>
-          : (
-            <ListGroup>
-              {this.state.budgets.map((budgetSummary: YNABTypes.BudgetSummary) => {
-                return <ListGroupItem key={budgetSummary.id}>
-                  <a href={`budget?budgetId=${budgetSummary.id}&currencySymbol=${budgetSummary.currencySymbol}`}>
-                    {budgetSummary.name}
-                  </a>
-                  </ListGroupItem>
-              })}
-            </ListGroup>
-          )
+          this.state.loading
+          ? loading
+          : budgetList
         }
       </div>
     )

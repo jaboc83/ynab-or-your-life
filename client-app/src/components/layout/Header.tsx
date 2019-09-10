@@ -1,26 +1,15 @@
 // 3rd Party
 import React from 'react';
-import { Nav, NavItem, NavLink } from 'reactstrap';
 import CSS from 'csstype';
+import Navigation from './Navigation';
 
-interface HeaderProps {}
-
-class Header extends React.Component<HeaderProps> {
-  render() {
-    return (
-      <header style={headerStyle}>
-        <h1>Budget or Your Life for YNAB</h1>
-        <Nav>
-          <NavItem>
-            <NavLink active href="/">Home</NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink href="/Privacy">Privacy</NavLink>
-          </NavItem>
-        </Nav>
-      </header>
-    );
-  }
+const Header: React.FC<{}> = () => {
+  return (
+    <header style={ headerStyle }>
+      <h1>Budget or Your Life for YNAB</h1>
+      <Navigation />
+    </header>
+  );
 }
 
 const headerStyle: CSS.Properties = {
