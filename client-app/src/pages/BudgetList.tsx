@@ -13,7 +13,7 @@ interface BudgetListProps extends RouteComponentProps {
 }
 
 // Component
-const BudgetList: React.FC<BudgetListProps> = props => {
+const BudgetList: React.FC<BudgetListProps> = ({ accessToken }) => {
   // State Hooks
   const [budgets, setBudgets] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,11 +25,14 @@ const BudgetList: React.FC<BudgetListProps> = props => {
 
   // Get the budget list from the server
   const fetchBudgets: () => Promise<void> = async () => {
+    if (!accessToken) {
+      return;
+    }
     try {
-      const result = await axios(`api/budget?accessToken=${props.accessToken}`);
+      const result = await axios(`api/budget?accessToken=${accessToken}`);
       setBudgets(result.data);
     } catch (e) {
-      alert(e);
+      // TODO: ? Logging ?
     } finally {
       setLoading(false);
     }
@@ -48,7 +51,7 @@ const BudgetList: React.FC<BudgetListProps> = props => {
   const budgetList = <ListGroup>{budgets.map(budgetItem)}</ListGroup>;
 
   // Main UI
-  return <div>{loading ? Loading : budgetList}</div>;
+  return <div>{loading ? <Loading /> : budgetList}</div>;
 };
 
 export default BudgetList;

@@ -43,7 +43,7 @@ const Home: React.FC<HomeProps> = props => {
         </div>
       ) : (
         <div className="form-group">
-          <a href={`/BudgetList`} className="btn btn-primary">
+          <a href={`/BudgetList`} className="btn btn-success">
             Click Here to Continue
           </a>
         </div>

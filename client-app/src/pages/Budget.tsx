@@ -13,7 +13,11 @@ interface BudgetProps extends RouteComponentProps {
 }
 
 // Component
-const Budget: React.FC<BudgetProps> = props => {
+const Budget: React.FC<BudgetProps> = ({
+  budgetId,
+  accessToken,
+  currencySymbol
+}) => {
   // State Hooks
   const [budget, setBudget] = useState<YNABTypes.BudgetDetail>();
   const [loading, setLoading] = useState(true);
@@ -34,13 +38,16 @@ const Budget: React.FC<BudgetProps> = props => {
 
   // Get the budget data from the server
   const fetchBudget: () => Promise<void> = async () => {
+    if (!budgetId || !accessToken) {
+      return;
+    }
     try {
       const result = await axios(
-        `api/budget/${props.budgetId}?accessToken=${props.accessToken}`
+        `api/budget/${budgetId}?accessToken=${accessToken}`
       );
       setBudget(result.data);
     } catch (e) {
-      alert(e);
+      // TODO: ? Logging ?
     } finally {
       setLoading(false);
     }
@@ -79,7 +86,7 @@ const Budget: React.FC<BudgetProps> = props => {
       <td>{category.name}</td>
       {wage === 0 ? (
         <td>
-          {props.currencySymbol}
+          {currencySymbol}
           {category.budgeted}
         </td>
       ) : (
@@ -107,7 +114,7 @@ const Budget: React.FC<BudgetProps> = props => {
       {loading ? (
         Loading
       ) : (
-        <Table striped>
+        <Table striped style={{ textAlign: "left" }}>
           {tableHeader}
           {tableBody}
         </Table>
