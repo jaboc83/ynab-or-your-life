@@ -112,7 +112,7 @@ const Budget: React.FC<BudgetProps> = ({
       {wageInput}
       <br />
       {loading ? (
-        Loading
+        <Loading />
       ) : (
         <Table striped style={{ textAlign: "left" }}>
           {tableHeader}
