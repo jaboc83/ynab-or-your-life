@@ -1,51 +1,56 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using YNABOrYourLife.Models;
 using YNAB.SDK;
-using YNAB.SDK.Model;
+using YNABOrYourLife.Models;
 
 namespace YNABOrYourLife.Controllers
 {
-  public class BudgetController : Controller
+  [Route("api/[controller]")]
+  [ApiController]
+  public class BudgetController : ControllerBase
   {
     private API ynabApi;
-    public BudgetController(IOptionsMonitor<YNABOptions> options) {
-    }
+    public BudgetController(IOptionsMonitor<YNABOptions> options) {}
 
     [HttpGet]
-    public async Task<IActionResult> Index([FromQuery(Name="access_token")] string token)
+    public async Task<IEnumerable<MiniBudgetSummary>> Get(string accessToken)
     {
-      ynabApi = new API(token);
-      var budgets = (await ynabApi.Budgets.GetBudgetsAsync()).Data.Budgets;
-      ViewData.Add("AccessToken", token);
-      return View(budgets);
+      ynabApi = new API(accessToken);
+      var budgets = (await ynabApi.Budgets.GetBudgetsAsync()).Data.Budgets.Select(b =>
+        new MiniBudgetSummary {
+          Id = b.Id.ToString(),
+          Name = b.Name,
+          CurrencySymbol = b.CurrencyFormat.CurrencySymbol
+        }
+      );
+      return budgets;
     }
 
-    [HttpGet]
-    [HttpPost]
-    [Route("Budget/{budgetId}")]
-    public async Task<IActionResult> Calculate(Guid budgetId, string wage, [FromQuery(Name="access_token")] string token, [FromQuery(Name="currency_symbol")] string currencySymbol)
+    [HttpGet("{budgetId}")]
+    public async Task<MiniBudgetDetail> GetBudgetDetail(string budgetId, string accessToken, string currencySymbol)
     {
-      ynabApi = new API(token);
+      var ignoredCategories = new string[] {"To be Budgeted", "Deferred Income SubCategory", "Uncategorized" };
+      ynabApi = new API(accessToken);
       var month = (await ynabApi.Months.GetBudgetMonthAsync(budgetId.ToString(), DateTime.Parse(Utils.GetCurrentMonthInISOFormat()))).Data.Month;
-      ViewData.Add("AccessToken", token);
-      ViewData.Add("CurrencySymbol", currencySymbol);
-      if(wage != null)
+      return new MiniBudgetDetail
       {
-        ViewData.Add("Wage", double.Parse(wage));
-      }
-      return View(month);
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-      return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        Id = budgetId,
+        Categories = month.Categories
+          .Where(c =>
+            !c.Hidden && !ignoredCategories.Contains(c.Name) && c.Budgeted > 0)
+          .Select(c =>
+            new MiniCategory
+            {
+              Id = c.Id.ToString(),
+              Name = c.Name,
+              Budgeted = float.Parse(Utils.ConvertMilliUnitsToCurrencyAmount(c.Budgeted))
+            }
+          )
+      };
     }
   }
 }

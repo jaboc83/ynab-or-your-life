@@ -1,4 +1,5 @@
 # Budget Or Your Life for YNAB
+
 ![YNAB or Your Life Preview](/BudgetOrYourLifePreview.png)
 
 
