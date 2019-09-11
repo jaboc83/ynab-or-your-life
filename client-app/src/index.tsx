@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 
 // CSS
 import 'bootstrap/dist/css/bootstrap.css';
-import './index.css';
+import '../css/index.css';
 
 // Components
 import App from './App';
