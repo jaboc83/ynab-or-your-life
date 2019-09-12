@@ -25,8 +25,24 @@ const Budget: React.FC<BudgetProps> = ({
 
   // Effect Hooks
   useEffect(() => {
+    // Get the budget data from the server
+    const fetchBudget: () => Promise<void> = async () => {
+      if (!budgetId || !accessToken) {
+        return;
+      }
+      try {
+        const result = await axios(
+          `api/budget/${budgetId}?accessToken=${accessToken}`
+        );
+        setBudget(result.data);
+      } catch (e) {
+        // TODO: ? Logging ?
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchBudget();
-  });
+  }, [accessToken]);
 
   // sort two categories by budgeted amount desc
   const categorySort = (
@@ -34,23 +50,6 @@ const Budget: React.FC<BudgetProps> = ({
     b: YNABTypes.CategorySummary
   ) => {
     return a.budgeted < b.budgeted ? 1 : -1;
-  };
-
-  // Get the budget data from the server
-  const fetchBudget: () => Promise<void> = async () => {
-    if (!budgetId || !accessToken) {
-      return;
-    }
-    try {
-      const result = await axios(
-        `api/budget/${budgetId}?accessToken=${accessToken}`
-      );
-      setBudget(result.data);
-    } catch (e) {
-      // TODO: ? Logging ?
-    } finally {
-      setLoading(false);
-    }
   };
 
   // Update the wage of the state

@@ -20,23 +20,22 @@ const BudgetList: React.FC<BudgetListProps> = ({ accessToken }) => {
 
   // Effect Hooks
   useEffect(() => {
+    // Get the budget list from the server
+    const fetchBudgets: () => Promise<void> = async () => {
+      if (!accessToken) {
+        return;
+      }
+      try {
+        const result = await axios(`api/budget?accessToken=${accessToken}`);
+        setBudgets(result.data);
+      } catch (e) {
+        // TODO: ? Logging ?
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchBudgets();
-  });
-
-  // Get the budget list from the server
-  const fetchBudgets: () => Promise<void> = async () => {
-    if (!accessToken) {
-      return;
-    }
-    try {
-      const result = await axios(`api/budget?accessToken=${accessToken}`);
-      setBudgets(result.data);
-    } catch (e) {
-      // TODO: ? Logging ?
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [accessToken]);
 
   // UI Fragments
   const budgetItem = (budgetSummary: YNABTypes.BudgetSummary) => (

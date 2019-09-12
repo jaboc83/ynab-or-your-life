@@ -27,10 +27,10 @@ const SEARCH = window.location.hash
 // Component
 const App: React.FC = () => {
   // State Hooks
+  const [token, setToken] = useState("");
   const [budgetId, setBudgetId] = useState("");
   const [currencySymbol, setCurrencySymbol] = useState("$");
   const [title, setTitle] = useState("Budget or Your Life for YNAB");
-  const [token, setToken] = useState("");
   const [clientId, setClientId] = useState(
     "63b4364465cb3e94af96e1475d986911d55cd24634b583787257ddb546f78a7c"
   );
@@ -43,7 +43,7 @@ const App: React.FC = () => {
         return key === "" ? value : decodeURIComponent(value);
       });
       setToken(params.access_token);
-      sessionStorage.setItem("ynab_access_token", token || "");
+      sessionStorage.setItem("ynab_access_token", params.access_token || "");
       window.location.hash = "";
     } else {
       // Otherwise try sessionStorage
@@ -59,7 +59,7 @@ const App: React.FC = () => {
     if (urlParams.has("currencySymbol")) {
       setCurrencySymbol(urlParams.get("currencySymbol")!);
     }
-  });
+  }, []);
 
   // UI Partials
   const home = (
