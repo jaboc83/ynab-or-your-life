@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace YNABOrYourLife
 {
@@ -26,7 +27,7 @@ namespace YNABOrYourLife
     public void ConfigureServices(IServiceCollection services)
     {
       services.Configure<YNABOptions>(Configuration);
-      services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+      services.AddControllersWithViews();
 
       // In production, the React files will be served from this directory
       services.AddSpaStaticFiles(configuration =>
@@ -36,7 +37,7 @@ namespace YNABOrYourLife
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
       if (env.IsDevelopment())
       {
@@ -53,14 +54,17 @@ namespace YNABOrYourLife
       app.UseStaticFiles();
       app.UseSpaStaticFiles();
 
-      app.UseMvc(routes =>
+      app.UseRouting();
+
+      app.UseEndpoints(endpoints =>
       {
-        routes.MapRoute(
-          name: "default",
-          template: "{controller=Home}/{action=Index}/{id?}");
+        endpoints.MapControllerRoute(
+            name: "default",
+            pattern: "{controller}/{action=Index}/{id?}");
       });
 
-      app.UseSpa(spa => {
+      app.UseSpa(spa =>
+      {
         spa.Options.SourcePath = "client-app";
 
         if (env.IsDevelopment())
