@@ -1,6 +1,6 @@
 // 3rd Party
-import React from "react";
-import { RouteComponentProps } from "react-router";
+import React from 'react';
+import { RouteComponentProps } from 'react-router';
 
 // Interfaces
 interface HomeProps extends RouteComponentProps {
@@ -29,21 +29,21 @@ const Home: React.FC<HomeProps> = props => {
   );
   const ynabAuthForm = (
     <form>
-      {props.accessToken === "" ? (
-        <div className="form-group">
-          <p className="lead">
+      {props.accessToken === '' ? (
+        <div className='form-group'>
+          <p className='lead'>
             If you would like to use this App, please authorize with YNAB!
           </p>
           <a
-            href={`https://app.youneedabudget.com/oauth/authorize?client_id=${props.clientId}&redirect_uri=${window.location.href}&response_type=token`}
-            className="btn btn-primary"
+            href={`https://app.youneedabudget.com/oauth/authorize?client_id=${props.clientId}&redirect_uri=${window.location.href}&response_type=token&scope=read-only`}
+            className='btn btn-primary'
           >
             Authorize This App With YNAB &gt;
           </a>
         </div>
       ) : (
-        <div className="form-group">
-          <a href={`/BudgetList`} className="btn btn-success">
+        <div className='form-group'>
+          <a href={`/BudgetList`} className='btn btn-success'>
             Click Here to Continue
           </a>
         </div>
@@ -53,8 +53,8 @@ const Home: React.FC<HomeProps> = props => {
 
   // Main UI
   return (
-    <div className="text-center">
-      <h1 className="display-4">Welcome</h1>
+    <div className='text-center'>
+      <h1 className='display-4'>Welcome</h1>
       {overview}
       {legal}
       {ynabAuthForm}
